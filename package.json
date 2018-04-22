@@ -1,0 +1,23 @@
+{
+  "name": "epam",
+  "version": "1.0.0",
+  "description": "NODE.JS HOMEWORK",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node ./app.js",
+    "test": "''"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "author": "Vladyslav_Borbich@epam.com",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "nodemon": "^1.17.3"
+  }
+}
