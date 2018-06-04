@@ -14,10 +14,18 @@
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
+    "command-line-args": "^5.0.2",
     "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "command-line-usage": "^5.0.5",
+    "convert-csv-to-json": "0.0.13",
+    "jsdom": "^11.11.0"
   }
 }
