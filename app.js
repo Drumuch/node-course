@@ -1,6 +1,15 @@
-import * as config       from './config/config.json';
-import { Product, User } from './models';
+import express          from 'express';
+import cookieParser     from 'cookie-parser';
+import routes           from './routes';
+import cookieMiddleware from './middlewares/cookie.middleware';
+import queryMiddleware  from './middlewares/query.middleware';
 
-new Product();
-new User();
-console.log(config.app);
+const app = express();
+
+app.use(cookieParser());
+app.use(cookieMiddleware);
+app.use(queryMiddleware);
+app.use('/api', routes);
+
+
+export default app;
