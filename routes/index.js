@@ -35,22 +35,14 @@ const users = [
 ];
 
 routes.get('/products', (req, res) => {
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify(data));
-    res.end();
+    res.status(200).json(data);
+
 });
 
 routes.post('/products', (req, res) => {
     // some logic for creating product and pushing it into db
-    const newProduct = {
-        id: 'newId',
-        name: 'newName',
-        price: 'newPrice',
-        reviews: 'newReviews'
-    };
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify(newProduct));
-    res.end();
+    const newProduct = req.body;
+    res.status(200).json({ product: newProduct});
 });
 
 routes.get('/products/:id', (req, res) => {
@@ -78,9 +70,7 @@ routes.get('/products/:id/reviews', (req, res) => {
 });
 
 routes.get('/users', (req, res) => {
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify(users));
-    res.end();
+    res.status(200).json(users);
 });
 
 export default routes;
