@@ -68,7 +68,7 @@ routes.get('/products/:id/reviews', checkToken, (req, res) => {
 //     res.status(200).json(users);
 // });
 
-routes.get('/users', passport.authenticate('bearer', { session: false }), (req, res) => {
+routes.get('/users', passport.authenticate('local', { session: false }), (req, res) => {
     res.status(200).json(users);
 });
 
@@ -89,13 +89,20 @@ routes.post('/auth', (req, res) => {
     }
 });
 
-// routes.post('/authenticate', passport.authenticate('local', { session: false }), (req, res) => {
-//     // some logic for getting token...
-//     const token = {
-//         token: 'TOKEN'
-//     };
-//     res.json(token);
-// });
+routes.post('/authenticate', passport.authenticate('local', { session: false }), (req, res) => {
+    const body      = req.body;
+    const userLogin = body.login;
+    if (userExist(userLogin) && validPassword(body)) {
+        const userDetails = users.map((user) => user.name === userLogin ? user : false).filter((i) => i)[0];
+        res.json({
+            id: userDetails.id,
+            token: userDetails.token
+        });
+    } else {
+        const errorObject = getErrorAuthResponse();
+        res.status(404).json(errorObject);
+    }
+});
 
 function userExist(userName) {
     const match = users.find((user) => user.name === userName);
