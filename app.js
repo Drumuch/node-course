@@ -8,6 +8,7 @@ import cookieMiddleware from './middlewares/cookie.middleware';
 import queryMiddleware  from './middlewares/query.middleware';
 import users            from './models/users';
 
+
 passport.use(
     new strategy.Strategy({
             usernameField: 'login',

@@ -1,86 +1,51 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
 import checkToken from '../middlewares/check-token';
 import CONST from '../constants/constants';
-import users from '../models/users';
+import models from '../models';
 
 const routes = express.Router();
 const secret = CONST.secret;
 
-const data = [
-    {
-        id: 1,
-        name: 'milk',
-        price: '10',
-        reviews: 'Lorem ipsum'
-    },
-    {
-        id: 2,
-        name: 'apple',
-        price: '2',
-        reviews: 'Lorem ipsum upset'
-    },
-    {
-        id: 3,
-        name: 'pie',
-        price: '5',
-        reviews: 'Lorem'
-    }
-];
-
-routes.get('/products', checkToken, (req, res) => {
-    res.status(200).json(data);
-
+routes.get('/products', checkToken, async (req, res) => {
+    const products = await models.Products.findAll();
+    res.status(200).json(products);
 });
 
 routes.post('/products', checkToken, (req, res) => {
-    // some logic for creating product and pushing it into db
-    const newProduct = req.body;
-    res.status(200).json({ product: newProduct});
+    req.body.createdAt = new Date();
+    req.body.updatedAt = new Date();
+    models.Products.create(req.body);
+    res.status(200).json({ product: req.body});
 });
 
-routes.get('/products/:id', checkToken, (req, res) => {
-    const product = data.filter((product) => product.id == req.params.id);
-    if (product[0]) {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.write(JSON.stringify(product[0]));
-    } else {
-        res.writeHead(400, {'Content-Type': 'text/plain'});
-        res.write('Product with id ' + req.params.id + ' doesn\'t exist');
-    }
-    res.end();
+routes.get('/products/:id', checkToken, async (req, res) => {
+    const product = await models.Products.findById(req.params.id);
+    if (product) res.status(200).json(product);
+    else res.status(403).json({error: 'Product with id ' + req.params.id + ' doesn\'t exist'});
 });
 
-routes.get('/products/:id/reviews', checkToken, (req, res) => {
-    const product = data.filter((product) => product.id == req.params.id);
-    if (product[0]) {
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.write(JSON.stringify(product[0].reviews));
-    } else {
-        res.writeHead(400, {'Content-Type': 'text/plain'});
-        res.write('Product with id ' + req.params.id + ' doesn\'t exist');
-    }
-    res.end();
+routes.get('/products/:id/reviews', checkToken, async (req, res) => {
+    const product = await models.Products.findById(req.params.id);
+    if (product) res.status(200).json(product.reviews);
+    else res.status(403).json({error: 'Product with id ' + req.params.id + ' doesn\'t exist'});
 });
 
-// routes.get('/users', checkToken, (req, res) => {
-//     res.status(200).json(users);
-// });
-
-routes.get('/users', passport.authenticate('local', { session: false }), (req, res) => {
-    res.status(200).json(users);
+routes.get('/users', checkToken, (req, res) => {
+    models.Users.findAll().then(users => {
+        res.status(200).json(users);
+    })
 });
 
-routes.post('/auth', (req, res) => {
-    const body      = req.body;
-    const userLogin = body.login;
-    if (userExist(userLogin) && validPassword(body)) {
+routes.post('/auth', async (req, res) => {
+    const reqUser = req.body;
+    const userLogin = reqUser.login;
+    if (userExist(userLogin) && validPassword(reqUser)) {
         const response = getSuccessAuthResponse();
-        response.token = getJWT(body);
+        response.token = getJWT(reqUser);
         response.data.user = {
             email: userLogin,
-            username: body.password
+            username: reqUser.password
         };
         res.status(200).json(response);
     } else {
@@ -89,29 +54,16 @@ routes.post('/auth', (req, res) => {
     }
 });
 
-routes.post('/authenticate', passport.authenticate('local', { session: false }), (req, res) => {
-    const body      = req.body;
-    const userLogin = body.login;
-    if (userExist(userLogin) && validPassword(body)) {
-        const userDetails = users.map((user) => user.name === userLogin ? user : false).filter((i) => i)[0];
-        res.json({
-            id: userDetails.id,
-            token: userDetails.token
-        });
-    } else {
-        const errorObject = getErrorAuthResponse();
-        res.status(404).json(errorObject);
-    }
-});
-
-function userExist(userName) {
+async function userExist(userName) {
+    const users = await models.Users.findAll();
     const match = users.find((user) => user.name === userName);
     return Boolean(match);
 }
 
-function validPassword(userDetails) {
+async function validPassword(userDetails) {
+    const users = await models.Users.findAll();
     const user = users.find((user) => user.name === userDetails.login);
-    return user.password === userDetails.password;
+    return user ? user.password === userDetails.password : false;
 }
 
 function getSuccessAuthResponse() {

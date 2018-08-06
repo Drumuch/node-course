@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon --exec babel-node ./index.js",
+    "migration": "sequelize db:migrate",
+    "db": "docker run -p 5432:5432 --name newdb -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=us -e POSTGRES_DB=practicedocker -d postgres",
     "html-server": "nodemon ./http-servers/html-server.js",
     "echo-server": "nodemon ./http-servers/echo-server.js",
     "json-server": "nodemon ./http-servers/json-server.js",
@@ -31,6 +33,8 @@
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "pg": "^7.4.3",
+    "sequelize": "^4.38.0"
   }
 }
