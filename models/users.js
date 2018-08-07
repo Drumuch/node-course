@@ -1,12 +1,5 @@
-const user = (sequelize, DataTypes) => {
-    return sequelize.define('Users', {
-        name: {
-            type: DataTypes.STRING
-        },
-        password: {
-            type: DataTypes.INTEGER
-        },
-    });
-};
+import mongoose from 'mongoose';
 
-export default user;
+const schema = new mongoose.Schema({ name: 'string', password: 'string'});
+const Users = mongoose.model('Users', schema);
+export default Users;

@@ -1,21 +1,5 @@
-const product = (sequelize, DataTypes) => {
-    return sequelize.define('Products', {
-        name: {
-            type: DataTypes.STRING
-        },
-        price: {
-            type: DataTypes.STRING
-        },
-        reviews: {
-            type: DataTypes.STRING
-        },
-        createdAt: {
-            type: DataTypes.DATE
-        },
-        updatedAt: {
-            type: DataTypes.DATE
-        }
-    });
-};
+import mongoose from 'mongoose';
 
-export default product;
+const schema = new mongoose.Schema({ name: 'string', price: 'string', reviews: 'string'});
+const Products = mongoose.model('Products', schema);
+export default Products;

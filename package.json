@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec babel-node ./index.js",
     "migration": "sequelize db:migrate",
-    "db": "docker run -p 5432:5432 --name newdb -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=us -e POSTGRES_DB=practicedocker -d postgres",
+    "db": "docker run -e MONGO_INITDB_ROOT_USERNAME=a -e MONGO_INITDB_ROOT_PASSWORD=p -e MONGO_INITDB_DATABASE=mbd -e MONGO_USERNAME=foo -e MONGO_PASSWORD=bar -p 27017 mongo",
     "html-server": "nodemon ./http-servers/html-server.js",
     "echo-server": "nodemon ./http-servers/echo-server.js",
     "json-server": "nodemon ./http-servers/json-server.js",
@@ -32,6 +32,8 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
+    "mongodb": "^3.1.1",
+    "mongoose": "^5.2.7",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.3",

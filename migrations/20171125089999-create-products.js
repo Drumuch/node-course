@@ -4,23 +4,17 @@ const data = [
     {
         name: 'milk',
         price: '10',
-        reviews: 'Lorem ipsum',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        reviews: 'Lorem ipsum'
     },
     {
         name: 'apple',
         price: '2',
-        reviews: 'Lorem ipsum upset',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        reviews: 'Lorem ipsum upset'
     },
     {
         name: 'pie',
         price: '5',
-        reviews: 'Lorem',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        reviews: 'Lorem'
     }
 ];
 
